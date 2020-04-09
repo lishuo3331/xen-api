@@ -111,6 +111,9 @@ let validate_certificate kind pem now private_key =
     |> R.reword_error
         (fun _ ->
           `Msg (server_certificate_chain_invalid, []))
+    >>= function
+      | [] -> Error (`Msg (server_certificate_chain_invalid, []))
+      | certs -> Ok certs
     )
   |> function
     | Ok (cert :: _) -> Ok cert
